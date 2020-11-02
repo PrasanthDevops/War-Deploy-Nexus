@@ -1,0 +1,28 @@
+---
+- name: install apache tomcat server
+  hosts: appserver
+  become: true
+
+
+  tasks:
+  - name: install java
+    yum:
+      name: java
+      state: latest
+  - name: Download apache tomcat server package
+    get_url:
+      url: https://mirrors.estointernet.in/apache/tomcat/tomcat-8/v8.5.58/bin/apache-tomcat-8.5.58.tar.gz
+      dest: /opt/
+  - name: Extracting the apache tomcat server tar file.
+    unarchive:
+      src: /opt/apache-tomcat-8.5.58.tar.gz
+      dest: /opt
+      remote_src: yes
+  - name: Downloading the jenkins.war file
+    get_url:
+      url: https://get.jenkins.io/war-stable/2.249.1/jenkins.war
+      dest: /opt/apache-tomcat-8.5.58/webapps
+  - name: starting the apache tomcat server software
+    shell: nohup /opt/apache-tomcat-8.5.58/bin/startup.sh
+
+ 
